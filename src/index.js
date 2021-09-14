@@ -1,12 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import 'react-notifications/lib/notifications.css';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {AppProvider} from "./Context.js"
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+
+<AppProvider>
+<App />
+ </AppProvider>
+  
   </React.StrictMode>,
   document.getElementById('root')
 );

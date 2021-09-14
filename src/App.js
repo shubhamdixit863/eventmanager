@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Header from './components/Header';
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -8,8 +9,15 @@ import {
   Link
 } from "react-router-dom";
 import Login from './components/Login';
+
 import Signup from './components/Signup';
 import Shiftlist from './components/Shiftlist';
+import Adminevent from './components/Admin/Adminevent';
+import Adminshift from './components/Admin/Adminshift';
+import Adminshiftposition from './components/Admin/Adminshiftposition';
+import Adminvolunteer from './components/Admin/Adminvolunteer';
+import Protectedroutes from './components/Auth/Protectedroutes';
+
 
 function App() {
   return (
@@ -21,21 +29,37 @@ function App() {
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
+
+
+
         <Switch>
-          <Route path="/login">
+
+        <Protectedroutes exact path="/" component={(props)=><Shiftlist {...props}/>}  expectedRole="user" />
+
+
+
+
+          <Route  exact path="/login">
             <Login/>
           </Route>
 
 
-          <Route path="/signup">
+          <Route exact path="/signup">
             <Signup/>
           </Route>
-         
+          <Protectedroutes exact path="/shiftlist" component={(props)=><Shiftlist {...props}/>}  expectedRole="user" />
 
-          <Route path="/shiftlist">
-            <Shiftlist/>
-          </Route>
-        </Switch>
+
+        
+
+          <Protectedroutes exact path="/admin/event" component={(props)=><Adminevent {...props}/>}  expectedRole="admin" />
+          <Protectedroutes exact path="/admin/shift" component={(props)=><Adminshift {...props}/>}  expectedRole="admin"/>
+
+          <Protectedroutes exact path="/admin/shiftposition" component={(props)=><Adminshiftposition {...props}/>} expectedRole="admin" />
+
+          <Protectedroutes exact path="/admin/volunteer" component={(props)=><Adminvolunteer {...props}/>} expectedRole="admin" />
+
+</Switch>
      
     </Router>
       

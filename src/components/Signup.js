@@ -1,8 +1,47 @@
-import React from 'react'
+import React,{useState} from 'react'
+import axios from "axios";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import Loader from "react-loader-spinner";
+
 
 function Signup() {
+  const [state,setState]=useState({
+    username:"",
+    password:""
+  })
+
+  const [loader,setLoader]=useState(false);
+
+const handleChange=(event)=>{
+  setState({...state,[event.target.name]:event.target.value})
+
+
+}
+
+const Signup=()=>{
+  setLoader(true);
+
+  axios.post(`${process.env.REACT_APP_URL}/createcred`,{...state,role:"admin"}).then(data=>{
+    setLoader(false);
+    if(data["data"])
+    {
+      NotificationManager.success('Signup Success ,Please Login', 'Success');
+
+    }
+
+    else{
+      NotificationManager.error('Username Already In Use', 'Failed', 3000);
+
+    }
+  })
+
+}
+
     return (
         <>
+                <NotificationContainer/>
+
+
         <div
         className="max-w-screen-xl m-0 sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1"
       >
@@ -20,16 +59,23 @@ function Signup() {
               <div className="mx-auto max-w-xs">
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
-                  type="email"
-                  placeholder="Email"
+                  type="text"
+                  placeholder="Username"
+                  name="username"
+                  onChange={handleChange}
                 />
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                   type="password"
                   placeholder="Password"
+                  name="password"
+                  onChange={handleChange}
+
                 />
                 <button
                   className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
+
+                  onClick={Signup}
                 >
                   <svg
                     className="w-6 h-6 -ml-2"
@@ -48,7 +94,7 @@ function Signup() {
                   </span>
                 </button>
                 <p className="mt-6 text-xs text-gray-600 text-center">
-                  I agree to abide by templatana's
+                  I agree to abide by
                   <a href="#" className="border-b border-gray-500 border-dotted">
                     Terms of Service
                   </a>
@@ -61,12 +107,26 @@ function Signup() {
             </div>
           </div>
         </div>
+
+
         <div className="flex-1 bg-indigo-100 text-center hidden lg:flex">
+
+
           <div
             className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat"
             style={{backgroundImage: `url('https://storage.googleapis.com/devitary-image-host.appspot.com/15848031292911696601-undraw_designer_life_w96d.svg')`}}
           ></div>
         </div>
+
+
+        <Loader
+        style={{position:"absolute" ,marginTop:"120px"}}
+        type="Bars"
+        color="#00BFFF"
+        height={100}
+        width={100}
+        visible={loader}
+      />
       </div>
       <div className="REMOVE-THIS-ELEMENT-IF-YOU-ARE-USING-THIS-PAGE hidden treact-popup fixed inset-0 flex items-center justify-center" >
           <div className="max-w-lg p-8 sm:pb-4 bg-white rounded shadow-lg text-center sm:text-left">
