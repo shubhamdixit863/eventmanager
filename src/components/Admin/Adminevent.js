@@ -1,399 +1,317 @@
 import DataTable from 'react-data-table-component';
 import SortIcon from "@material-ui/icons/ArrowDownward";
 import Modal from 'react-modal';
-import React from "react";
+import React,{useState,useEffect} from "react";
+import Eventmodal from "./Eventmodal";
+
+import { PencilIcon, TrashIcon } from '@heroicons/react/solid'
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import Loader from "react-loader-spinner";
+import moment from "moment";
+import _ from "lodash";
 
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
+//import axios from 'axios';
+import axios from '../../interceptors'; // importing axios from customAxios
 
-const movies=[
-    {
-      id: 1,
-      title: "Beetlejuice",
-      year: "1988",
-      runtime: "92",
-      genres: ["Comedy", "Fantasy"],
-      director: "Tim Burton",
-      actors: "Alec Baldwin, Geena Davis, Annie McEnroe, Maurice Page",
-      plot:
-        'A couple of recently deceased ghosts contract the services of a "bio-exorcist" in order to remove the obnoxious new owners of their house.',
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTUwODE3MDE0MV5BMl5BanBnXkFtZTgwNTk1MjI4MzE@._V1_SX300.jpg"
-    },
-    {
-      id: 2,
-      title: "The Cotton Club",
-      year: "1984",
-      runtime: "127",
-      genres: ["Crime", "Drama", "Music"],
-      director: "Francis Ford Coppola",
-      actors: "Richard Gere, Gregory Hines, Diane Lane, Lonette McKee",
-      plot:
-        "The Cotton Club was a famous night club in Harlem. The story follows the people that visited the club, those that ran it, and is peppered with the Jazz music that made it so famous.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTU5ODAyNzA4OV5BMl5BanBnXkFtZTcwNzYwNTIzNA@@._V1_SX300.jpg"
-    },
-    {
-      id: 3,
-      title: "The Shawshank Redemption",
-      year: "1994",
-      runtime: "142",
-      genres: ["Crime", "Drama"],
-      director: "Frank Darabont",
-      actors: "Tim Robbins, Morgan Freeman, Bob Gunton, William Sadler",
-      plot:
-        "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BODU4MjU4NjIwNl5BMl5BanBnXkFtZTgwMDU2MjEyMDE@._V1_SX300.jpg"
-    },
-    {
-      id: 4,
-      title: "Crocodile Dundee",
-      year: "1986",
-      runtime: "97",
-      genres: ["Adventure", "Comedy"],
-      director: "Peter Faiman",
-      actors: "Paul Hogan, Linda Kozlowski, John Meillon, David Gulpilil",
-      plot:
-        "An American reporter goes to the Australian outback to meet an eccentric crocodile poacher and invites him to New York City.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTg0MTU1MTg4NF5BMl5BanBnXkFtZTgwMDgzNzYxMTE@._V1_SX300.jpg"
-    },
-    {
-      id: 5,
-      title: "Valkyrie",
-      year: "2008",
-      runtime: "121",
-      genres: ["Drama", "History", "Thriller"],
-      director: "Bryan Singer",
-      actors: "Tom Cruise, Kenneth Branagh, Bill Nighy, Tom Wilkinson",
-      plot:
-        "A dramatization of the 20 July assassination and political coup plot by desperate renegade German Army officers against Hitler during World War II.",
-      posterUrl:
-        "http://ia.media-imdb.com/images/M/MV5BMTg3Njc2ODEyN15BMl5BanBnXkFtZTcwNTAwMzc3NA@@._V1_SX300.jpg"
-    },
-    {
-      id: 6,
-      title: "Ratatouille",
-      year: "2007",
-      runtime: "111",
-      genres: ["Animation", "Comedy", "Family"],
-      director: "Brad Bird, Jan Pinkava",
-      actors: "Patton Oswalt, Ian Holm, Lou Romano, Brian Dennehy",
-      plot:
-        "A rat who can cook makes an unusual alliance with a young kitchen worker at a famous restaurant.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTMzODU0NTkxMF5BMl5BanBnXkFtZTcwMjQ4MzMzMw@@._V1_SX300.jpg"
-    },
-    {
-      id: 7,
-      title: "City of God",
-      year: "2002",
-      runtime: "130",
-      genres: ["Crime", "Drama"],
-      director: "Fernando Meirelles, Kátia Lund",
-      actors:
-        "Alexandre Rodrigues, Leandro Firmino, Phellipe Haagensen, Douglas Silva",
-      plot:
-        "Two boys growing up in a violent neighborhood of Rio de Janeiro take different paths: one becomes a photographer, the other a drug dealer.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMjA4ODQ3ODkzNV5BMl5BanBnXkFtZTYwOTc4NDI3._V1_SX300.jpg"
-    },
-    {
-      id: 8,
-      title: "Memento",
-      year: "2000",
-      runtime: "113",
-      genres: ["Mystery", "Thriller"],
-      director: "Christopher Nolan",
-      actors: "Guy Pearce, Carrie-Anne Moss, Joe Pantoliano, Mark Boone Junior",
-      plot:
-        "A man juggles searching for his wife's murderer and keeping his short-term memory loss from being an obstacle.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BNThiYjM3MzktMDg3Yy00ZWQ3LTk3YWEtN2M0YmNmNWEwYTE3XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg"
-    },
-    {
-      id: 9,
-      title: "The Intouchables",
-      year: "2011",
-      runtime: "112",
-      genres: ["Biography", "Comedy", "Drama"],
-      director: "Olivier Nakache, Eric Toledano",
-      actors: "François Cluzet, Omar Sy, Anne Le Ny, Audrey Fleurot",
-      plot:
-        "After he becomes a quadriplegic from a paragliding accident, an aristocrat hires a young man from the projects to be his caregiver.",
-      posterUrl:
-        "http://ia.media-imdb.com/images/M/MV5BMTYxNDA3MDQwNl5BMl5BanBnXkFtZTcwNTU4Mzc1Nw@@._V1_SX300.jpg"
-    },
-    {
-      id: 10,
-      title: "Stardust",
-      year: "2007",
-      runtime: "127",
-      genres: ["Adventure", "Family", "Fantasy"],
-      director: "Matthew Vaughn",
-      actors: "Ian McKellen, Bimbo Hart, Alastair MacIntosh, David Kelly",
-      plot:
-        "In a countryside town bordering on a magical land, a young man makes a promise to his beloved that he'll retrieve a fallen star by venturing into the magical realm.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMjkyMTE1OTYwNF5BMl5BanBnXkFtZTcwMDIxODYzMw@@._V1_SX300.jpg"
-    },
-    {
-      id: 11,
-      title: "Apocalypto",
-      year: "2006",
-      runtime: "139",
-      genres: ["Action", "Adventure", "Drama"],
-      director: "Mel Gibson",
-      actors:
-        "Rudy Youngblood, Dalia Hernández, Jonathan Brewer, Morris Birdyellowhead",
-      plot:
-        "As the Mayan kingdom faces its decline, the rulers insist the key to prosperity is to build more temples and offer human sacrifices. Jaguar Paw, a young man captured for sacrifice, flees to avoid his fate.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BNTM1NjYyNTY5OV5BMl5BanBnXkFtZTcwMjgwNTMzMQ@@._V1_SX300.jpg"
-    },
-    {
-      id: 12,
-      title: "Taxi Driver",
-      year: "1976",
-      runtime: "113",
-      genres: ["Crime", "Drama"],
-      director: "Martin Scorsese",
-      actors: "Diahnne Abbott, Frank Adu, Victor Argo, Gino Ardito",
-      plot:
-        "A mentally unstable Vietnam War veteran works as a night-time taxi driver in New York City where the perceived decadence and sleaze feeds his urge for violent action, attempting to save a preadolescent prostitute in the process.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BNGQxNDgzZWQtZTNjNi00M2RkLWExZmEtNmE1NjEyZDEwMzA5XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg"
-    },
-    {
-      id: 13,
-      title: "No Country for Old Men",
-      year: "2007",
-      runtime: "122",
-      genres: ["Crime", "Drama", "Thriller"],
-      director: "Ethan Coen, Joel Coen",
-      actors: "Tommy Lee Jones, Javier Bardem, Josh Brolin, Woody Harrelson",
-      plot:
-        "Violence and mayhem ensue after a hunter stumbles upon a drug deal gone wrong and more than two million dollars in cash near the Rio Grande.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMjA5Njk3MjM4OV5BMl5BanBnXkFtZTcwMTc5MTE1MQ@@._V1_SX300.jpg"
-    },
-    {
-      id: 14,
-      title: "Planet 51",
-      year: "2009",
-      runtime: "91",
-      genres: ["Animation", "Adventure", "Comedy"],
-      director: "Jorge Blanco, Javier Abad, Marcos Martínez",
-      actors: "Jessica Biel, John Cleese, Gary Oldman, Dwayne Johnson",
-      plot:
-        "An alien civilization is invaded by Astronaut Chuck Baker, who believes that the planet was uninhabited. Wanted by the military, Baker must get back to his ship before it goes into orbit without him.",
-      posterUrl:
-        "http://ia.media-imdb.com/images/M/MV5BMTUyOTAyNTA5Ml5BMl5BanBnXkFtZTcwODU2OTM0Mg@@._V1_SX300.jpg"
-    },
-    {
-      id: 15,
-      title: "Looper",
-      year: "2012",
-      runtime: "119",
-      genres: ["Action", "Crime", "Drama"],
-      director: "Rian Johnson",
-      actors: "Joseph Gordon-Levitt, Bruce Willis, Emily Blunt, Paul Dano",
-      plot:
-        "In 2074, when the mob wants to get rid of someone, the target is sent into the past, where a hired gun awaits - someone like Joe - who one day learns the mob wants to 'close the loop' by sending back Joe's future self for assassination.",
-      posterUrl:
-        "http://ia.media-imdb.com/images/M/MV5BMTY3NTY0MjEwNV5BMl5BanBnXkFtZTcwNTE3NDA1OA@@._V1_SX300.jpg"
-    },
-    {
-      id: 16,
-      title: "Corpse Bride",
-      year: "2005",
-      runtime: "77",
-      genres: ["Animation", "Drama", "Family"],
-      director: "Tim Burton, Mike Johnson",
-      actors: "Johnny Depp, Helena Bonham Carter, Emily Watson, Tracey Ullman",
-      plot:
-        "When a shy groom practices his wedding vows in the inadvertent presence of a deceased young woman, she rises from the grave assuming he has married her.",
-      posterUrl:
-        "http://ia.media-imdb.com/images/M/MV5BMTk1MTY1NjU4MF5BMl5BanBnXkFtZTcwNjIzMTEzMw@@._V1_SX300.jpg"
-    },
-    {
-      id: 17,
-      title: "The Third Man",
-      year: "1949",
-      runtime: "93",
-      genres: ["Film-Noir", "Mystery", "Thriller"],
-      director: "Carol Reed",
-      actors: "Joseph Cotten, Alida Valli, Orson Welles, Trevor Howard",
-      plot:
-        "Pulp novelist Holly Martins travels to shadowy, postwar Vienna, only to find himself investigating the mysterious death of an old friend, Harry Lime.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMjMwNzMzMTQ0Ml5BMl5BanBnXkFtZTgwNjExMzUwNjE@._V1_SX300.jpg"
-    },
-    {
-      id: 18,
-      title: "The Beach",
-      year: "2000",
-      runtime: "119",
-      genres: ["Adventure", "Drama", "Romance"],
-      director: "Danny Boyle",
-      actors:
-        "Leonardo DiCaprio, Daniel York, Patcharawan Patarakijjanon, Virginie Ledoyen",
-      plot:
-        "Twenty-something Richard travels to Thailand and finds himself in possession of a strange map. Rumours state that it leads to a solitary beach paradise, a tropical bliss - excited and intrigued, he sets out to find it.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BN2ViYTFiZmUtOTIxZi00YzIxLWEyMzUtYjQwZGNjMjNhY2IwXkEyXkFqcGdeQXVyNDk3NzU2MTQ@._V1_SX300.jpg"
-    },
-    {
-      id: 19,
-      title: "Scarface",
-      year: "1983",
-      runtime: "170",
-      genres: ["Crime", "Drama"],
-      director: "Brian De Palma",
-      actors:
-        "Al Pacino, Steven Bauer, Michelle Pfeiffer, Mary Elizabeth Mastrantonio",
-      plot:
-        "In Miami in 1980, a determined Cuban immigrant takes over a drug cartel and succumbs to greed.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMjAzOTM4MzEwNl5BMl5BanBnXkFtZTgwMzU1OTc1MDE@._V1_SX300.jpg"
-    },
-    {
-      id: 20,
-      title: "Sid and Nancy",
-      year: "1986",
-      runtime: "112",
-      genres: ["Biography", "Drama", "Music"],
-      director: "Alex Cox",
-      actors: "Gary Oldman, Chloe Webb, David Hayman, Debby Bishop",
-      plot:
-        "Morbid biographical story of Sid Vicious, bassist with British punk group the Sex Pistols, and his girlfriend Nancy Spungen. When the Sex Pistols break up after their fateful US tour, ...",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMjExNjA5NzY4M15BMl5BanBnXkFtZTcwNjQ2NzI5NA@@._V1_SX300.jpg"
-    },
-    {
-      id: 21,
-      title: "Black Swan",
-      year: "2010",
-      runtime: "108",
-      genres: ["Drama", "Thriller"],
-      director: "Darren Aronofsky",
-      actors: "Natalie Portman, Mila Kunis, Vincent Cassel, Barbara Hershey",
-      plot:
-        'A committed dancer wins the lead role in a production of Tchaikovsky\'s "Swan Lake" only to find herself struggling to maintain her sanity.',
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BNzY2NzI4OTE5MF5BMl5BanBnXkFtZTcwMjMyNDY4Mw@@._V1_SX300.jpg"
-    },
-    {
-      id: 22,
-      title: "Inception",
-      year: "2010",
-      runtime: "148",
-      genres: ["Action", "Adventure", "Sci-Fi"],
-      director: "Christopher Nolan",
-      actors: "Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page, Tom Hardy",
-      plot:
-        "A thief, who steals corporate secrets through use of dream-sharing technology, is given the inverse task of planting an idea into the mind of a CEO.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_SX300.jpg"
-    },
-    {
-      id: 23,
-      title: "The Deer Hunter",
-      year: "1978",
-      runtime: "183",
-      genres: ["Drama", "War"],
-      director: "Michael Cimino",
-      actors: "Robert De Niro, John Cazale, John Savage, Christopher Walken",
-      plot:
-        "An in-depth examination of the ways in which the U.S. Vietnam War impacts and disrupts the lives of people in a small industrial town in Pennsylvania.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTYzYmRmZTQtYjk2NS00MDdlLTkxMDAtMTE2YTM2ZmNlMTBkXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_SX300.jpg"
-    },
-    {
-      id: 24,
-      title: "Chasing Amy",
-      year: "1997",
-      runtime: "113",
-      genres: ["Comedy", "Drama", "Romance"],
-      director: "Kevin Smith",
-      actors: "Ethan Suplee, Ben Affleck, Scott Mosier, Jason Lee",
-      plot:
-        "Holden and Banky are comic book artists. Everything's going good for them until they meet Alyssa, also a comic book artist. Holden falls for her, but his hopes are crushed when he finds out she's gay.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BZDM3MTg2MGUtZDM0MC00NzMwLWE5NjItOWFjNjA2M2I4YzgxXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg"
-    },
-    {
-      id: 25,
-      title: "Django Unchained",
-      year: "2012",
-      runtime: "165",
-      genres: ["Drama", "Western"],
-      director: "Quentin Tarantino",
-      actors: "Jamie Foxx, Christoph Waltz, Leonardo DiCaprio, Kerry Washington",
-      plot:
-        "With the help of a German bounty hunter, a freed slave sets out to rescue his wife from a brutal Mississippi plantation owner.",
-      posterUrl:
-        "http://ia.media-imdb.com/images/M/MV5BMjIyNTQ5NjQ1OV5BMl5BanBnXkFtZTcwODg1MDU4OA@@._V1_SX300.jpg"
-    },
-    {
-      id: 26,
-      title: "The Silence of the Lambs",
-      year: "1991",
-      runtime: "118",
-      genres: ["Crime", "Drama", "Thriller"],
-      director: "Jonathan Demme",
-      actors:
-        "Jodie Foster, Lawrence A. Bonney, Kasi Lemmons, Lawrence T. Wrentz",
-      plot:
-        "A young F.B.I. cadet must confide in an incarcerated and manipulative killer to receive his help on catching another serial killer who skins his victims.",
-      posterUrl:
-        "https://images-na.ssl-images-amazon.com/images/M/MV5BMTQ2NzkzMDI4OF5BMl5BanBnXkFtZTcwMDA0NzE1NA@@._V1_SX300.jpg"
-    }]
-const columns = [
-    {
-      id: 1,
-      name: "Title",
-      selector: (row) => row.title,
-      sortable: true,
-      reorder: true
-    },
-    {
-      id: 2,
-      name: "Director",
-      selector: (row) => row.director,
-      sortable: true,
-      reorder: true
-    },
-    {
-      id: 3,
-      name: "Runtime (m)",
-      selector: (row) => row.runtime,
-      sortable: true,
-      right: true,
-      reorder: true
-    }
-  ];
+
+
+
+
+
+
 
 export default function Adminevent() {
 
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const [startDate, setStartDate] = useState(new Date());
+  const [startTime, setStartTime] = useState('10:00');
+  const [loader,setLoader]=useState(false);
+  const [deleted,setDeleted]=useState(false)
 
-  function openModal() {
-    setIsOpen(true);
+  const [endDate, setEndDate] = useState(new Date());
+  const [endTime, setEndTime] = useState('10:00');
+  const [showModal, setShowModal] = React.useState(false);
+  const [editedData,setEditData]=useState({})
+  const [isEdit,setisEdit]=useState(false);
+
+  const initalState={
+    title:"",
+    description:"",
+    location:"",
+    type:"",
+    startDate:"",
+    startTime:"",
+    endDate:"",
+    endTime:"",
+    requiredOwner:""
+
+
+
+  }
+
+  const [movies,setMovies]=useState([])
+  const [events,setEvents]=useState(initalState)
+
+
+  // columns 
+
+  const setStartDateData=(event)=>{
+
+    if(isEdit)
+    {
+setEditData({...editedData,startDate:moment(event).format("YYYY-MM-DD")})
+    }
+    else{
+      setStartDate(event)
+
+    }
+   
+  }
+
+  const setEndDateData=(event)=>{
+
+    if(isEdit)
+    {
+setEditData({...editedData,endDate:moment(event).format("YYYY-MM-DD")})
+    }
+    else{
+      setEndDate(event)
+
+    }
+   
   }
 
 
+  const setStartTimeData=(event)=>{
+
+    if(isEdit)
+    {
+setEditData({...editedData,startTime:event})
+    }
+    else{
+      setStartTime(event)
+
+    }
+   
+  }
+
+  const setEndTimeData=(event)=>{
+
+
+    if(isEdit)
+    {
+setEditData({...editedData,endTime:event})
+    }
+    else{
+      setEndTime(event)
+
+    }
+   
+  }
+
+  const columns = [
+    {
+      id: 1,
+      name: "Title",
+      selector: (row) => row.title,
+      sortable: true,
+      reorder: true,
+      wrap:true
+   
+    },
+    {
+      id: 2,
+      name: "Description",
+      selector: (row) => row.description,
+      sortable: true,
+      reorder: true,
+      wrap:true
+    },
+    {
+      id: 3,
+      name: "Location",
+      selector: (row) => row.location,
+      sortable: true,
+      right: true,
+      reorder: true
+    },
+    {
+      id: 4,
+      name: "Type",
+      selector: (row) => row.type,
+      sortable: true,
+      right: true,
+      reorder: true
+    },{
+      id: 5,
+      name: "Start Date And Time",
+      selector: (row) => `${moment(row.startDate).format("YYYY-MM-DD")} ${row.startTime}`,
+      sortable: true,
+      right: true,
+      reorder: true,
+      wrap:true
+    },
+    {
+      id: 6,
+      name: "End Date And Time",
+      selector: (row) => `${moment(row.endDate).format("YYYY-MM-DD")} ${row.endTime}`,
+      sortable: true,
+      right: true,
+      reorder: true,
+      wrap:true
+    },
+   
+    {
+      id: 7,
+      name: "Volunteer",
+      selector: (row) => row.volunteerCount,
+    
+      sortable: true,
+      right: true,
+      reorder: true
+    },
+    {
+      id:8,
+      name:"Edit",
+      cell:(row, index, column, id) => <PencilIcon onClick={()=>editData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
+      sortable: true,
+      right: true,
+      reorder: true
+     
+      
+    },
+    {
+      id:9,
+      name:"Delete",
+      cell:(row, index, column, id) => <TrashIcon onClick={()=>deleteData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
+      sortable: true,
+      right: true,
+      reorder: true
+     
+      
+    }
+  ];
+
+
+
+
+  const editData=(...data)=>{
+    console.log(data);
+    setEditData(data[0])
+    setisEdit(true)
+    
+    setShowModal(true);
+
+
+  }
+
+
+
+  const deleteData=(...data)=>{
+    setLoader(true);
+
+    axios.delete(`${process.env.REACT_APP_URL}/event/${data[0].event_id}`).then(data=>{
+      NotificationManager.success('SuccessFully Deleted', 'Success');
+
+      setDeleted(!deleted);
+
+    }).catch(err=>{
+      console.log(err);
+    })
+
+
+  }
+
+useEffect(() => {
+
+  getData()
+ 
+}, [deleted])
+
+
+function getData()
+{
+  setLoader(true)
+  axios.get(`${process.env.REACT_APP_URL}/event`).then(data=>{
+    setLoader(false);
+
+ setMovies(data["data"]);
+  }).catch(err=>{
+    console.log(err);
+    setLoader(false);
+
+  })
+
+}
+
+
+  const createNewRecord=()=>{
+
+    
+    setLoader(true)
+    events.startDate=moment(startDate).format("YYYY-MM-DD");
+    events.startTime=startTime;
+    events.endDate=moment(endDate).format("YYYY-MM-DD");
+    events.endTime=endTime;
+   
+const check=Object.values(events).some(ele=>ele.length===0);
+
+ if (check) {NotificationManager.error('All Fields Are Required','Error') ;setLoader(false);return}
+
+    axios.post(`${process.env.REACT_APP_URL}/event`,events).then(data=>{
+      console.log(data);
+      NotificationManager.success('SuccessFully created', 'Success');
+      setShowModal(false)
+      setDeleted(!deleted);
+      setEvents(initalState);
+
+
+    }).catch(err=>{
+      console.log(err);
+      setIsOpen(false);
+
+    })
+
+  }
+
+  const editRecord=()=>{
+    
+    setLoader(true)
+    
+    editedData.startDate=moment(editedData.startDate).format("YYYY-MM-DD");
+    
+    editedData.endDate=moment(editedData.endDate).format("YYYY-MM-DD");
+    
+    axios.put(`${process.env.REACT_APP_URL}/event`,editedData).then(data=>{
+      console.log(data);
+      NotificationManager.success('SuccessFully created', 'Success');
+      setShowModal(false)
+      setDeleted(!deleted);
+
+
+    }).catch(err=>{
+      console.log(err);
+      setIsOpen(false);
+
+    })
+
+  }
+
+  const handleChange=(event)=>{
+
+    if(isEdit)
+    {
+      setEditData({...editedData,[event.target.name]:event.target.value})
+
+    }
+    else{
+      setEvents({...events,[event.target.name]:event.target.value})
+
+    }
+
+  }
 
   function closeModal() {
     setIsOpen(false);
@@ -402,58 +320,42 @@ export default function Adminevent() {
 
     return (
         <section class="container mx-auto p-6 font-mono">
+          <NotificationContainer/>
+
         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
           <div class="w-full overflow-x-auto">
+
+        
           
-<button onClick={openModal} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+<button onClick={() => setShowModal(true)} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
   Create New
 </button>
 
      
 <DataTable
-title={"Shift List"}
+title={"Event List"}
 columns={columns}
 data={movies}
 defaultSortFieldId={1}
 sortIcon={<SortIcon />}
 pagination
-selectableRows
+
 className="w-full"
 />
 
+<Loader
+        style={{position:"absolute" ,zIndex:"1000",marginTop:"100px" ,marginLeft:"550px"}}
+        type="Bars"
+        color="#00BFFF"
+        height={100}
+        width={100}
+        visible={loader}
+      />
+
     </div>
     </div>
 
-    <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        contentLabel="Example Modal"
-        style={customStyles}
-      >
-      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-          <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2" for="username">
-              Username
-            </label>
-            <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" type="text" placeholder="Username"/>
-          </div>
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" for="password">
-              Password
-            </label>
-            <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" type="password" placeholder="******************"/>
-            <p className="text-red-500 text-xs italic">Please choose a password.</p>
-          </div>
-          <div className="flex items-center justify-between">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-              Sign In
-            </button>
-            <a className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="#">
-              Forgot Password?
-            </a>
-          </div>
-        </form>
-      </Modal>
+  <Eventmodal  isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange} setStartDate={setStartDateData} startDate={startDate} setStartTime={setStartTimeData} startTime={startTime} setEndDate={setEndDateData} endDate={endDate} setEndTime={setEndTimeData} endTime={endTime} createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
     </section>
 
      

@@ -1,9 +1,10 @@
 import React,{useState,useContext} from 'react'
-import axios from "axios";
+//import axios from "axios";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Loader from "react-loader-spinner";
 import { useHistory } from "react-router-dom";
 import {AppContext} from "../Context"
+import axios from './../interceptors'; // importing axios from customAxios
 
 
 
@@ -27,7 +28,7 @@ function Login() {
   const Login=()=>{
     setLoader(true);
   
-    axios.post(`${process.env.REACT_APP_URL}/login`,{...state,role:"user"}).then(data=>{
+    axios.post(`/login`,{...state,role:"user"}).then(data=>{
 
       setLoader(false);
       if(data["data"].success)

@@ -13,6 +13,8 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Shiftlist from './components/Shiftlist';
 import Adminevent from './components/Admin/Adminevent';
+import Modal from './components/Admin/Eventmodal';
+
 import Adminshift from './components/Admin/Adminshift';
 import Adminshiftposition from './components/Admin/Adminshiftposition';
 import Adminvolunteer from './components/Admin/Adminvolunteer';
@@ -43,6 +45,9 @@ function App() {
             <Login/>
           </Route>
 
+          <Route  exact path="/modal">
+            <Modal/>
+          </Route>
 
           <Route exact path="/signup">
             <Signup/>
