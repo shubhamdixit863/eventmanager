@@ -5,7 +5,7 @@ import constants from '../../constants/constants';
 import moment  from "moment";
 
 
-export default function Modal({isEdit,eventsData,data,handleChange,editRecord,setStartDate,startDate,setStartTime,startTime,setEndDate,endDate,setEndTime,endTime,createNewRecord,setShowModal,showModal}) {
+export default function Modal({eventId,isEdit,eventsData,data,handleChange,editRecord,setStartDate,startDate,setStartTime,startTime,setEndDate,endDate,setEndTime,endTime,createNewRecord,setShowModal,showModal}) {
   return (
     <>
      
@@ -43,7 +43,8 @@ New Shift                  </h3>}
 
 
                 <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
-                <div className="mb-6">
+
+                  {!eventId?       <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" for="Location">
 
                 Events
@@ -60,7 +61,8 @@ New Shift                  </h3>}
                   }
 
 </select>
-          </div>
+          </div>:""}
+         
     
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" for="Description">

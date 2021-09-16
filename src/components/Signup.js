@@ -21,7 +21,7 @@ const handleChange=(event)=>{
 const Signup=()=>{
   setLoader(true);
 
-  axios.post(`${process.env.REACT_APP_URL}/createcred`,{...state,role:"admin"}).then(data=>{
+  axios.post(`${process.env.REACT_APP_URL}/createcred`,{...state,role:"user"}).then(data=>{
     setLoader(false);
     if(data["data"])
     {

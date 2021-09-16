@@ -8,7 +8,10 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Loader from "react-loader-spinner";
 import moment from "moment";
 import _ from "lodash";
+import {
 
+  useParams
+} from "react-router-dom";
 
 //import axios from 'axios';
 import axios from '../../interceptors'; // importing axios from customAxios
@@ -35,6 +38,8 @@ export default function Adminshift() {
   const [editedData,setEditData]=useState({})
   const [isEdit,setisEdit]=useState(false);
   const [eventsData,setEventsData]=useState([]);
+  let { eventId } = useParams();
+
 
   const initalState={
  
@@ -207,22 +212,43 @@ useEffect(() => {
 function getData()
 {
 
-  setLoader(true)
-  axios.get(`${process.env.REACT_APP_URL}/Shift`).then(data=>{
-    setLoader(false);
+  if(!eventId)
+  {
 
- setMovies(data["data"]);
-  }).catch(err=>{
-    console.log(err);
-    setLoader(false);
+    setLoader(true)
+    axios.get(`${process.env.REACT_APP_URL}/Shift`).then(data=>{
+      setLoader(false);
+  
+   setMovies(data["data"]);
+    }).catch(err=>{
+      console.log(err);
+      setLoader(false);
+  
+    })
+  }
 
-  })
+  else{
+    setLoader(true)
+    axios.get(`${process.env.REACT_APP_URL}/Shift`).then(data=>{
+      setLoader(false);
+  
+   setMovies(data["data"]);
+    }).catch(err=>{
+      console.log(err);
+      setLoader(false);
+  
+    })
+  }
+
+
 
 }
 
 function getEvents()
 {
   
+  if(!eventId)
+  {
   setLoader(true)
   axios.get(`${process.env.REACT_APP_URL}/event`).then(data=>{
     setLoader(false);
@@ -237,6 +263,8 @@ function getEvents()
 
 }
 
+}
+
 
   const createNewRecord=()=>{
 
@@ -246,6 +274,7 @@ function getEvents()
     events.startTime=startTime;
     events.endDate=moment(endDate).format("YYYY-MM-DD");
     events.endTime=endTime;
+    if(!events.eventId) events.eventId=eventId;
    
 const check=Object.values(events).some(ele=>ele.length===0);
 
@@ -274,6 +303,8 @@ const check=Object.values(events).some(ele=>ele.length===0);
     editedData.startDate=moment(editedData.startDate).format("YYYY-MM-DD");
     
     editedData.endDate=moment(editedData.endDate).format("YYYY-MM-DD");
+    if(!editedData.eventId) editedData.eventId=eventId;
+
     
     axios.put(`${process.env.REACT_APP_URL}/Shift`,editedData).then(data=>{
       console.log(data);
@@ -346,7 +377,7 @@ className="w-full"
     </div>
     </div>
 
-  <Shiftmodal eventsData={eventsData}  isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange} setStartDate={setStartDateData} startDate={startDate} setStartTime={setStartTimeData} startTime={startTime} setEndDate={setEndDateData} endDate={endDate} setEndTime={setEndTimeData} endTime={endTime} createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
+  <Shiftmodal  eventId={eventId} eventsData={eventsData}  isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange} setStartDate={setStartDateData} startDate={startDate} setStartTime={setStartTimeData} startTime={startTime} setEndDate={setEndDateData} endDate={endDate} setEndTime={setEndTimeData} endTime={endTime} createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
     </section>
 
      

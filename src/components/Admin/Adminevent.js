@@ -10,9 +10,9 @@ import Loader from "react-loader-spinner";
 import moment from "moment";
 import _ from "lodash";
 
-
 //import axios from 'axios';
 import axios from '../../interceptors'; // importing axios from customAxios
+import { NavLink,Link } from 'react-router-dom';
 
 
 
@@ -115,7 +115,7 @@ setEditData({...editedData,endTime:event})
     {
       id: 1,
       name: "Title",
-      selector: (row) => row.title,
+      cell:(row, index, column, id) => <Link  style={{ color:"blue" ,textDecoration:"underline"}}to={{pathname:`/admin/shift/${row.event_id}`}}>{row.title}</Link>,
       sortable: true,
       reorder: true,
       wrap:true
