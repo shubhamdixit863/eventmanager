@@ -10,6 +10,7 @@ import moment from "moment";
 import _ from "lodash";
 import {
 
+  Link,
   useParams
 } from "react-router-dom";
 
@@ -66,7 +67,7 @@ export default function Adminshift() {
 
     if(isEdit)
     {
-setEditData({...editedData,startDate:moment(event).format("YYYY-MM-DD")})
+setEditData({...editedData,startDate:moment(event).format("DD/MM/YYYY")})
     }
     else{
       setStartDate(event)
@@ -79,7 +80,7 @@ setEditData({...editedData,startDate:moment(event).format("YYYY-MM-DD")})
 
     if(isEdit)
     {
-setEditData({...editedData,endDate:moment(event).format("YYYY-MM-DD")})
+setEditData({...editedData,endDate:moment(event).format("DD/MM/YYYY")})
     }
     else{
       setEndDate(event)
@@ -117,9 +118,17 @@ setEditData({...editedData,endTime:event})
   }
 
   const columns = [
-  
     {
       id: 1,
+      name: "Id",
+      cell:(row, index, column, id) => <Link  style={{ color:"blue" ,textDecoration:"underline"}}to={{pathname:`/admin/shiftposition/${row.id}`}}>{row.id}</Link>,
+      sortable: true,
+      reorder: true,
+      wrap:true
+    },
+  
+    {
+      id: 2,
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
@@ -127,19 +136,28 @@ setEditData({...editedData,endTime:event})
       wrap:true
     },
    
+    {
+      id: 3,
+      name: "Event Name",
+      selector: (row) => row.eventName,
+      sortable: true,
+      reorder: true,
+      wrap:true
+    },
+
    {
-      id: 2,
+      id: 4,
       name: "Start Date And Time",
-      selector: (row) => `${moment(row.startDate).format("YYYY-MM-DD")} ${row.startTime}`,
+      selector: (row) => `${moment(row.startDate).format("DD/MM/YYYY")} ${row.startTime}`,
       sortable: true,
       right: true,
       reorder: true,
       wrap:true
     },
     {
-      id: 3,
+      id: 5,
       name: "End Date And Time",
-      selector: (row) => `${moment(row.endDate).format("YYYY-MM-DD")} ${row.endTime}`,
+      selector: (row) => `${moment(row.endDate).format("DD/MM/YYYY")} ${row.endTime}`,
       sortable: true,
       right: true,
       reorder: true,
@@ -147,7 +165,7 @@ setEditData({...editedData,endTime:event})
     },
    
     {
-      id:4,
+      id:6,
       name:"Edit",
       cell:(row, index, column, id) => <PencilIcon onClick={()=>editData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
       sortable: true,
@@ -157,7 +175,7 @@ setEditData({...editedData,endTime:event})
       
     },
     {
-      id:5,
+      id:7,
       name:"Delete",
       cell:(row, index, column, id) => <TrashIcon onClick={()=>deleteData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
       sortable: true,
@@ -229,7 +247,7 @@ function getData()
 
   else{
     setLoader(true)
-    axios.get(`${process.env.REACT_APP_URL}/Shift`).then(data=>{
+    axios.get(`${process.env.REACT_APP_URL}/ShiftByEventID/${eventId}`).then(data=>{
       setLoader(false);
   
    setMovies(data["data"]);
@@ -275,7 +293,7 @@ function getEvents()
     events.endDate=moment(endDate).format("YYYY-MM-DD");
     events.endTime=endTime;
     if(!events.eventId) events.eventId=eventId;
-   
+   debugger;
 const check=Object.values(events).some(ele=>ele.length===0);
 
  if (check) {NotificationManager.error('All Fields Are Required','Error') ;setLoader(false);return}
@@ -300,9 +318,9 @@ const check=Object.values(events).some(ele=>ele.length===0);
     
     setLoader(true)
     
-    editedData.startDate=moment(editedData.startDate).format("YYYY-MM-DD");
+    editedData.startDate=moment(editedData.startDate).format("DD/MM/YYYY");
     
-    editedData.endDate=moment(editedData.endDate).format("YYYY-MM-DD");
+    editedData.endDate=moment(editedData.endDate).format("DD/MM/YYYY");
     if(!editedData.eventId) editedData.eventId=eventId;
 
     
@@ -342,7 +360,7 @@ const check=Object.values(events).some(ele=>ele.length===0);
 
     return (
         <section class="container mx-auto p-6 font-mono">
-          <NotificationContainer/>
+          
 
         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
           <div class="w-full overflow-x-auto">
@@ -355,7 +373,7 @@ const check=Object.values(events).some(ele=>ele.length===0);
 
      
 <DataTable
-title={"Shift List"}
+title={movies[0]?`${movies[0].eventName} Shift List`:"Shift List"}
 columns={columns}
 data={movies}
 defaultSortFieldId={1}

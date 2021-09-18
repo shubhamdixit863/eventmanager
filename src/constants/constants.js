@@ -22,6 +22,18 @@
         {
             key:"False",value:false,
         }
+    ],
+    roles:[
+        {
+            key:"Doctor",value:"Doctor"
+        },
+        {
+            key:"Driver",value:"Driver",
+           
+        },
+        {
+            key:"Support",value:"Support",
+        }
     ]
 
 

@@ -61,7 +61,7 @@ export default function Adminevent() {
 
     if(isEdit)
     {
-setEditData({...editedData,startDate:moment(event).format("YYYY-MM-DD")})
+setEditData({...editedData,startDate:moment(event).format("DD/MM/YYYY")})
     }
     else{
       setStartDate(event)
@@ -74,7 +74,7 @@ setEditData({...editedData,startDate:moment(event).format("YYYY-MM-DD")})
 
     if(isEdit)
     {
-setEditData({...editedData,endDate:moment(event).format("YYYY-MM-DD")})
+setEditData({...editedData,endDate:moment(event).format("DD/MM/YYYY")})
     }
     else{
       setEndDate(event)
@@ -147,7 +147,7 @@ setEditData({...editedData,endTime:event})
     },{
       id: 5,
       name: "Start Date And Time",
-      selector: (row) => `${moment(row.startDate).format("YYYY-MM-DD")} ${row.startTime}`,
+      selector: (row) => `${moment(row.startDate).format("DD/MM/YYYY")} ${row.startTime}`,
       sortable: true,
       right: true,
       reorder: true,
@@ -156,7 +156,7 @@ setEditData({...editedData,endTime:event})
     {
       id: 6,
       name: "End Date And Time",
-      selector: (row) => `${moment(row.endDate).format("YYYY-MM-DD")} ${row.endTime}`,
+      selector: (row) => `${moment(row.endDate).format("DD/MM/YYYY")} ${row.endTime}`,
       sortable: true,
       right: true,
       reorder: true,
@@ -280,9 +280,9 @@ const check=Object.values(events).some(ele=>ele.length===0);
     
     setLoader(true)
     
-    editedData.startDate=moment(editedData.startDate).format("YYYY-MM-DD");
+    editedData.startDate=moment(editedData.startDate).format("DD/MM/YYYY");
     
-    editedData.endDate=moment(editedData.endDate).format("YYYY-MM-DD");
+    editedData.endDate=moment(editedData.endDate).format("DD/MM/YYYY");
     
     axios.put(`${process.env.REACT_APP_URL}/event`,editedData).then(data=>{
       console.log(data);
@@ -320,7 +320,7 @@ const check=Object.values(events).some(ele=>ele.length===0);
 
     return (
         <section class="container mx-auto p-6 font-mono">
-          <NotificationContainer/>
+          
 
         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
           <div class="w-full overflow-x-auto">

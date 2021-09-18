@@ -19,11 +19,7 @@ export default function Modal({eventId,isEdit,eventsData,data,handleChange,editR
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                    {isEdit? <h3 className="text-3xl font-semibold">
-
-Edit Shift                  </h3>: <h3 className="text-3xl font-semibold">
-
-New Shift                  </h3>}
+              
                  
                   <button
                     className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
@@ -44,91 +40,33 @@ New Shift                  </h3>}
 
                 <p className="my-4 text-blueGray-500 text-lg leading-relaxed">
 
-                  {!eventId?       <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" for="Location">
+                <label className="block text-gray-700 text-sm font-bold mb-2" for="Location">
 
-                Events
-                </label>
-                
-                <select  value={data.type}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="eventId" onChange={handleChange} >
+Roles
+</label>
 
-                <option value="">{"Select Event"}</option>
-                  {
-                    
-                    eventsData.map(ele=>(
-                      <option value={ele.event_id}>{ele.title}</option>
-                     
+<select    className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="role" onChange={handleChange} >
 
-                    ))
-                  }
+  {
+    constants.roles.map(ele=>(
+      <option value={ele.value}>{ele.key}</option>
+     
+
+    ))
+  }
 
 </select>
-          </div>:""}
-         
     
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" for="Description">
-                Description
+            <label className="block text-gray-700 text-sm font-bold mb-2" for="Assigned">
+                Assigned
 
                 </label>
-            <input value={data.description}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="description" onChange={handleChange}  type="text" placeholder="Description"/>
+            <input value={data.description}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="assigned" onChange={handleChange}  type="text" placeholder="Assigned"/>
           </div>
 
        
 
-       
-
-          <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="Location">
-
-Start Date
-</label>
-          <DatePicker
-          format={"yyyy-MM-dd"}
-        onChange={setStartDate}
-        value={isEdit?new Date(data.startDate):startDate}
-      />
-          </div>
-
-          <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="Location">
-
-Start Time
-</label>
-<TimePicker
-        onChange={setStartTime}
-        value={isEdit?data.startTime:startTime}
-      />
-          </div>
-
-          <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="Location">
-
-End Date
-</label>
-          <DatePicker
-          format={"yyyy-MM-dd"}
-        onChange={setEndDate}
-        value={isEdit?new Date(data.endDate):endDate}
-      />
-          </div>
-
-          <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" for="Location">
-
-End Time
-</label>
-<TimePicker
-        onChange={setEndTime}
-        value={isEdit?data.endTime:endTime}
-      />
-          </div>
-
-
-    
-
-
-         
         </p>
         
         </div>
@@ -143,8 +81,8 @@ End Time
                   </button>
                   {
                     isEdit?      <button onClick={editRecord} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-                    Edit Shift   </button>:      <button onClick={createNewRecord} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
-            Create Shift  </button>
+                    Edit Shift Position  </button>:      <button onClick={createNewRecord} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+            Create Shift Position  </button>
                   }
             
           

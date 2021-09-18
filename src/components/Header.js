@@ -8,6 +8,7 @@ import {
    
     Link
   } from "react-router-dom";
+import NotificationContainer from 'react-notifications/lib/NotificationContainer';
 
 function Header() {
 
@@ -25,8 +26,11 @@ function Header() {
   }
 
     return (
+
        
 <div className="relative bg-white">
+<NotificationContainer/>
+
   <div className="max-w-7xl mx-auto px-4 sm:px-6">
     <div className="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
       <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -47,11 +51,7 @@ function Header() {
         {
           (auth.checkRole("admin") || message.role=="admin") && auth.isAuthenticated()?<>
           
-          <Link to="/admin/shift" className="text-base font-medium text-gray-500 hover:text-gray-900"> Admin ShiftList </Link>
-          <Link to="/admin/shiftposition" className="text-base font-medium text-gray-500 hover:text-gray-900"> Admin Shift Position </Link>
-
-
-          <Link to="/admin/volunteer" className="text-base font-medium text-gray-500 hover:text-gray-900"> Admin Volunteer </Link>
+      
 
 
           <Link to="/admin/event" className="text-base font-medium text-gray-500 hover:text-gray-900"> Admin Event </Link>

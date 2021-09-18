@@ -39,7 +39,7 @@ const Signup=()=>{
 
     return (
         <>
-                <NotificationContainer/>
+                
 
 
         <div

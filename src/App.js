@@ -60,7 +60,7 @@ function App() {
           <Protectedroutes exact path="/admin/event" component={(props)=><Adminevent {...props}/>}  expectedRole="admin" />
           <Protectedroutes exact path="/admin/shift/:eventId?" component={(props)=><Adminshift {...props}/>}  expectedRole="admin"/>
 
-          <Protectedroutes exact path="/admin/shiftposition" component={(props)=><Adminshiftposition {...props}/>} expectedRole="admin" />
+          <Protectedroutes exact path="/admin/shiftposition/:shiftId" component={(props)=><Adminshiftposition {...props}/>} expectedRole="admin" />
 
           <Protectedroutes exact path="/admin/volunteer" component={(props)=><Adminvolunteer {...props}/>} expectedRole="admin" />
 
