@@ -5,7 +5,7 @@ import constants from '../../constants/constants';
 import moment  from "moment";
 
 
-export default function Modal({eventId,isEdit,eventsData,data,handleChange,editRecord,setStartDate,startDate,setStartTime,startTime,setEndDate,endDate,setEndTime,endTime,createNewRecord,setShowModal,showModal}) {
+export default function Modal({isEdit,data,handleChange,editRecord,createNewRecord,setShowModal,showModal}) {
   return (
     <>
      
@@ -45,7 +45,7 @@ export default function Modal({eventId,isEdit,eventsData,data,handleChange,editR
 Roles
 </label>
 
-<select    className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="role" onChange={handleChange} >
+<select    defaultValue={data.role} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="role" onChange={handleChange} >
 
   {
     constants.roles.map(ele=>(
@@ -62,7 +62,7 @@ Roles
                 Assigned
 
                 </label>
-            <input value={data.description}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="assigned" onChange={handleChange}  type="text" placeholder="Assigned"/>
+            <input value={data.assigned}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="assigned" onChange={handleChange}  type="text" placeholder="Assigned"/>
           </div>
 
        

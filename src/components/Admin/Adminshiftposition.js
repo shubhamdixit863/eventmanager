@@ -55,7 +55,15 @@ export default function Adminshiftposition() {
   const [movies,setMovies]=useState([])
 
   const handleChange=(event)=>{
-    setShiftPosition({...shiftposition,[event.target.name]:event.target.value})
+    if(!isEdit)
+    {
+      setShiftPosition({...shiftposition,[event.target.name]:event.target.value})
+
+    }
+
+    else{
+      setEditData({...editedData,[event.target.name]:event.target.value})
+    }
   }
 
   // columns 
@@ -216,7 +224,7 @@ function getData()
     if(!editedData.shiftId) editedData.shiftId=shiftId;
 
     
-    axios.put(`${process.env.REACT_APP_URL}/Shift`,editedData).then(data=>{
+    axios.put(`${process.env.REACT_APP_URL}/ShiftPosition`,editedData).then(data=>{
       console.log(data);
       NotificationManager.success('SuccessFully Edited', 'Success');
       setShowModal(false)
