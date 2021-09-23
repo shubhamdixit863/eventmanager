@@ -1,7 +1,7 @@
 import React from "react";
 import DatePicker from 'react-date-picker';
 import TimePicker from 'react-time-picker';
-import constants from '../../constants/constants';
+import constants from '../constants/constants';
 import moment  from "moment";
 
 
@@ -62,20 +62,8 @@ Roles
                 Assigned
 
                 </label>
-                <select    defaultValue={data.assigned} className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="assigned" onChange={handleChange} >
-
-                <option value="">NA</option>
-
-{
-
-  volunteers.map(ele=>(
-    <option value={`${ele.firstName} ${ele.lastName}`}>{`${ele.firstName} ${ele.lastName}`}</option>
-   
-
-  ))
-}
-
-</select>          </div>
+                <input  value={data.assigned}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="assigned" onChange={handleChange}  type="text" placeholder="Assigned To"/>
+         </div>
 
        
 

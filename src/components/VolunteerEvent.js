@@ -1,17 +1,14 @@
 import DataTable from 'react-data-table-component';
 import SortIcon from "@material-ui/icons/ArrowDownward";
-import Modal from 'react-modal';
 import React,{useState,useEffect} from "react";
-import Eventmodal from "./Eventmodal";
 
-import { PencilIcon, TrashIcon } from '@heroicons/react/solid'
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationManager} from 'react-notifications';
 import Loader from "react-loader-spinner";
 import moment from "moment";
 import _ from "lodash";
 
 //import axios from 'axios';
-import axios from '../../interceptors'; // importing axios from customAxios
+import axios from '../interceptors'; // importing axios from customAxios
 import { NavLink,Link } from 'react-router-dom';
 
 
@@ -21,7 +18,7 @@ import { NavLink,Link } from 'react-router-dom';
 
 
 
-export default function Adminevent() {
+export default function Volunteerevent() {
 
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -115,7 +112,7 @@ setEditData({...editedData,endTime:event})
     {
       id: 1,
       name: "Title",
-      cell:(row, index, column, id) => <Link  style={{ color:"blue" ,textDecoration:"underline"}}to={{pathname:`/admin/shift/${row.event_id}`}}>{row.title}</Link>,
+      cell:(row, index, column, id) => <Link  style={{ color:"blue" ,textDecoration:"underline"}}to={{pathname:`/shift/${row.event_id}`}}>{row.title}</Link>,
       sortable: true,
       reorder: true,
       wrap:true,
@@ -175,26 +172,7 @@ setEditData({...editedData,endTime:event})
       right: true,
       reorder: true
     },
-    {
-      id:8,
-      name:"Edit",
-      cell:(row, index, column, id) => <PencilIcon onClick={()=>editData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
-      sortable: true,
-      right: true,
-      reorder: true
-     
-      
-    },
-    {
-      id:9,
-      name:"Delete",
-      cell:(row, index, column, id) => <TrashIcon onClick={()=>deleteData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
-      sortable: true,
-      right: true,
-      reorder: true
-     
-      
-    }
+
   ];
 
 
@@ -238,8 +216,6 @@ function getData()
 {
   setLoader(true)
   axios.get(`/event`).then(data=>{
-    setLoader(false);
-
 
     const __data=data["data"].map(ele=>{
 
@@ -252,6 +228,9 @@ function getData()
       })
 
  setapiData(__data);
+    setLoader(false);
+
+
   }).catch(err=>{
     console.log(err);
     setLoader(false);
@@ -356,11 +335,7 @@ const check=Object.values(events).some(ele=>ele.length===0);
         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
           <div class="w-full overflow-x-auto">
 
-        
-          
-<button onClick={() => setShowModal(true)} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-  Create New
-</button>
+
 
      
 <DataTable
@@ -379,7 +354,6 @@ className="w-full"
     </div>
     </div>
 
-  <Eventmodal validation={validation} isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange} setStartDate={setStartDateData} startDate={startDate} setStartTime={setStartTimeData} startTime={startTime} setEndDate={setEndDateData} endDate={endDate} setEndTime={setEndTimeData} endTime={endTime} createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
     </section>
 
      

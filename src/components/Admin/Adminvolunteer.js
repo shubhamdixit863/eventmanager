@@ -32,6 +32,7 @@ export default function Adminvolunteer() {
   const [startTime, setStartTime] = useState('10:00');
   const [loader,setLoader]=useState(false);
   const [deleted,setDeleted]=useState(false)
+  const [validation,setValidation]=useState(false)
 
   const [endDate, setEndDate] = useState(new Date());
   const [endTime, setEndTime] = useState('10:00');
@@ -54,13 +55,12 @@ export default function Adminvolunteer() {
     email:"",
     mobile:"",
     postcode:"",
-    city:""
    
    }
 
    const [shiftposition,setShiftPosition]=useState(initalState)
 
-  const [movies,setMovies]=useState([])
+  const [apiData,setapiData]=useState([])
 
   const handleChange=(event)=>{
     if(!isEdit)
@@ -122,26 +122,9 @@ const columns = [
       reorder: true,
       wrap:true
     },
+
     {
       id: 6,
-      name: "Mobile",
-      selector: (row) => row.mobile,
-      sortable: true,
-      reorder: true,
-      wrap:true
-    },
-
-    {
-      id: 7,
-      name: "Email",
-      selector: (row) => row.email,
-      sortable: true,
-      reorder: true,
-      wrap:true
-    },
-
-    {
-      id: 8,
       name: "City",
       selector: (row) => row.city,
       sortable: true,
@@ -150,7 +133,7 @@ const columns = [
     },
    
     {
-      id: 9,
+      id: 7,
       name: "County",
       selector: (row) => row.county,
       sortable: true,
@@ -160,7 +143,7 @@ const columns = [
    
       
     {
-      id: 10,
+      id: 8,
       name: "Postcode",
       selector: (row) => row.postcode,
       sortable: true,
@@ -168,6 +151,25 @@ const columns = [
       wrap:true
     },
       
+    {
+      id: 9,
+      name: "Mobile",
+      selector: (row) => row.mobile,
+      sortable: true,
+      reorder: true,
+      wrap:true
+    },
+
+    {
+      id: 10,
+      name: "Email",
+      selector: (row) => row.email,
+      sortable: true,
+      reorder: true,
+      wrap:true
+    },
+
+    
   
    
    
@@ -244,7 +246,7 @@ function getData()
     axios.get(`volunteer`).then(data=>{
       setLoader(false);
   
-   setMovies(data["data"]);
+   setapiData(data["data"]);
     }).catch(err=>{
       console.log(err);
       setLoader(false);
@@ -265,10 +267,13 @@ function getData()
     console.log(shiftposition);
 
     //shiftposition.shiftId=shiftId;
-    const check=Object.values(shiftposition).some(ele=>ele.length===0);
+    const shiftPosition2=Object.assign({},shiftposition)
+    delete shiftPosition2.address2;
+    delete shiftPosition2.county;
+    const check=Object.values(shiftPosition2).some(ele=>ele.length ===0);
+    
 
-
- if (check) {NotificationManager.error('All Fields Are Required','Error') ;setLoader(false);return}
+ if (check) {NotificationManager.error('Please Fill The Required Fields','Error') ;setLoader(false);setValidation(true);return}
 
     axios.post(`${process.env.REACT_APP_URL}/volunteer`,shiftposition).then(data=>{
       console.log(data);
@@ -332,7 +337,7 @@ function getData()
 <DataTable
 title={"Volunteer List"}
 columns={columns}
-data={movies}
+data={apiData}
 defaultSortFieldId={1}
 sortIcon={<SortIcon />}
 pagination
@@ -352,7 +357,7 @@ className="w-full"
     </div>
     </div>
 
-  <Adminvolunteermodal    isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange}  createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
+  <Adminvolunteermodal  validation={validation}  isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange}  createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
     </section>
 
      

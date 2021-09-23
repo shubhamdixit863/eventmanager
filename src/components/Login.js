@@ -5,10 +5,16 @@ import Loader from "react-loader-spinner";
 import { useHistory } from "react-router-dom";
 import {AppContext} from "../Context"
 import axios from './../interceptors'; // importing axios from customAxios
+import auth from './Auth/auth';
+
 
 
 
 function Login() {
+
+  
+
+
   const [state,setState]=useState({
     username:"",
     password:""

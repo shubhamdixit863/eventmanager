@@ -1,10 +1,10 @@
 import DataTable from 'react-data-table-component';
 import SortIcon from "@material-ui/icons/ArrowDownward";
 import React,{useState,useEffect} from "react";
-import Shiftpositionmodal from "./Shiftpositionmodal";
 
+import Shiftpositionmodal from "./ShiftPositionModel";
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid'
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationManager} from 'react-notifications';
 import Loader from "react-loader-spinner";
 import moment from "moment";
 import _ from "lodash";
@@ -15,7 +15,7 @@ import {
 } from "react-router-dom";
 
 //import axios from 'axios';
-import axios from '../../interceptors'; // importing axios from customAxios
+import axios from '../interceptors'; // importing axios from customAxios
 
 
 
@@ -24,7 +24,7 @@ import axios from '../../interceptors'; // importing axios from customAxios
 
 
 
-export default function Adminshiftposition() {
+export default function Volunteershiftposition() {
 
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -97,10 +97,9 @@ const columns = [
       wrap:true
     },
 
-   
-   
+/*
     {
-      id:6,
+      id:4,
       name:"Edit",
       cell:(row, index, column, id) => <PencilIcon onClick={()=>editData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
       sortable: true,
@@ -109,16 +108,12 @@ const columns = [
      
       
     },
-    {
-      id:7,
-      name:"Delete",
-      cell:(row, index, column, id) => <TrashIcon onClick={()=>deleteData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
-      sortable: true,
-      right: true,
-      reorder: true
-     
-      
-    }
+    */
+
+   
+   
+ 
+ 
   
  
    
@@ -157,7 +152,6 @@ const columns = [
 useEffect(() => {
 
   getData();
-  getVolunteers();
  
  
 }, [deleted])
@@ -189,21 +183,6 @@ function getData()
 
 }
 
-
-function getVolunteers()
-{
-  
-  axios.get(`volunteer`).then(data=>{
- 
-
- setVolunteers(data["data"]);
-  }).catch(err=>{
-    console.log(err);
-  
-
-  })
-
-}
 
   const createNewRecord=()=>{
 
@@ -268,11 +247,12 @@ function getVolunteers()
         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
           <div class="w-full overflow-x-auto">
 
-        
           
-<button onClick={() => setShowModal(true)} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-  Create New
+          <button onClick={() => setShowModal(true)} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+ 
+ Add 
 </button>
+
 
      
 <DataTable
@@ -297,8 +277,8 @@ className="w-full"
 
     </div>
     </div>
+    <Shiftpositionmodal  volunteers={volunteers}  isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange}  createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
 
-  <Shiftpositionmodal  volunteers={volunteers}  isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange}  createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
     </section>
 
      

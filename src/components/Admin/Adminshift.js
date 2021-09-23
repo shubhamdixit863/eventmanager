@@ -57,7 +57,7 @@ export default function Adminshift() {
 
   }
 
-  const [movies,setMovies]=useState([])
+  const [apiData,setapiData]=useState([])
   const [events,setEvents]=useState(initalState)
 
 
@@ -67,7 +67,7 @@ export default function Adminshift() {
 
     if(isEdit)
     {
-setEditData({...editedData,startDate:moment(event).format("DD/MM/YYYY")})
+setEditData({...editedData,startDate:moment(event).format("YYYY-MM-DD")})
     }
     else{
       setStartDate(event)
@@ -80,7 +80,7 @@ setEditData({...editedData,startDate:moment(event).format("DD/MM/YYYY")})
 
     if(isEdit)
     {
-setEditData({...editedData,endDate:moment(event).format("DD/MM/YYYY")})
+setEditData({...editedData,endDate:moment(event).format("YYYY-MM-DD")})
     }
     else{
       setEndDate(event)
@@ -207,7 +207,7 @@ setEditData({...editedData,endTime:event})
   const deleteData=(...data)=>{
     setLoader(true);
 
-    axios.delete(`${process.env.REACT_APP_URL}/Shift/${data[0].id}`).then(data=>{
+    axios.delete(`${process.env.REACT_APP_URL}/shift/${data[0].id}`).then(data=>{
       NotificationManager.success('SuccessFully Deleted', 'Success');
 
       setDeleted(!deleted);
@@ -234,10 +234,10 @@ function getData()
   {
 
     setLoader(true)
-    axios.get(`${process.env.REACT_APP_URL}/Shift`).then(data=>{
+    axios.get(`${process.env.REACT_APP_URL}/shift`).then(data=>{
       setLoader(false);
   
-   setMovies(data["data"]);
+   setapiData(data["data"]);
     }).catch(err=>{
       console.log(err);
       setLoader(false);
@@ -247,10 +247,10 @@ function getData()
 
   else{
     setLoader(true)
-    axios.get(`${process.env.REACT_APP_URL}/ShiftByEventID/${eventId}`).then(data=>{
+    axios.get(`${process.env.REACT_APP_URL}/shiftByEventID/${eventId}`).then(data=>{
       setLoader(false);
   
-   setMovies(data["data"]);
+   setapiData(data["data"]);
     }).catch(err=>{
       console.log(err);
       setLoader(false);
@@ -298,7 +298,7 @@ const check=Object.values(events).some(ele=>ele.length===0);
 
  if (check) {NotificationManager.error('All Fields Are Required','Error') ;setLoader(false);return}
 
-    axios.post(`${process.env.REACT_APP_URL}/Shift`,events).then(data=>{
+    axios.post(`${process.env.REACT_APP_URL}/shift`,events).then(data=>{
       console.log(data);
       NotificationManager.success('SuccessFully created', 'Success');
       setShowModal(false)
@@ -324,7 +324,7 @@ const check=Object.values(events).some(ele=>ele.length===0);
     if(!editedData.eventId) editedData.eventId=eventId;
 
     
-    axios.put(`${process.env.REACT_APP_URL}/Shift`,editedData).then(data=>{
+    axios.put(`${process.env.REACT_APP_URL}/shift`,editedData).then(data=>{
       console.log(data);
       NotificationManager.success('SuccessFully Edited', 'Success');
       setShowModal(false)
@@ -373,9 +373,9 @@ const check=Object.values(events).some(ele=>ele.length===0);
 
      
 <DataTable
-title={movies[0]?`${movies[0].eventName} Shift List`:"Shift List"}
+title={apiData[0]?`${apiData[0].eventName} Shift List`:"Shift List"}
 columns={columns}
-data={movies}
+data={apiData}
 defaultSortFieldId={1}
 sortIcon={<SortIcon />}
 pagination

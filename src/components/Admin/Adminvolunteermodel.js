@@ -5,7 +5,7 @@ import constants from '../../constants/constants';
 import moment  from "moment";
 
 
-export default function Adminvolunteermodal({isEdit,data,handleChange,editRecord,createNewRecord,setShowModal,showModal}) {
+export default function Adminvolunteermodal({isEdit,validation,data,handleChange,editRecord,createNewRecord,setShowModal,showModal}) {
   return (
     <>
      
@@ -47,14 +47,16 @@ export default function Adminvolunteermodal({isEdit,data,handleChange,editRecord
                 First Name
 
                 </label>
-            <input value={data.firstName}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="firstName" onChange={handleChange}  type="text" placeholder="First Name"/>
+            <input value={data.firstName}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="firstName" onChange={handleChange}  type="text" placeholder="First Name"/>
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" for="Assigned">
                 Last Name
 
                 </label>
-            <input value={data.lastName}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="lastName" onChange={handleChange}  type="text" placeholder="Last Name"/>
+            <input value={data.lastName}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="lastName" onChange={handleChange}  type="text" placeholder="Last Name"/>
           </div>
 
 
@@ -64,7 +66,8 @@ export default function Adminvolunteermodal({isEdit,data,handleChange,editRecord
            Address Line 1
 
                 </label>
-            <input value={data.address1}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="address1" onChange={handleChange}  type="text" placeholder="Address Line 1"/>
+            <input value={data.address1}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="address1" onChange={handleChange}  type="text" placeholder="Address Line 1"/>
           </div>
 
 
@@ -74,7 +77,8 @@ export default function Adminvolunteermodal({isEdit,data,handleChange,editRecord
            Address Line 2
 
                 </label>
-            <input value={data.address2}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="address2" onChange={handleChange}  type="text" placeholder="Address Line 2"/>
+            <input value={data.address2}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="address2" onChange={handleChange}  type="text" placeholder="Address Line 2"/>
           </div>
 
           <div className="mb-6">
@@ -83,7 +87,8 @@ export default function Adminvolunteermodal({isEdit,data,handleChange,editRecord
       Town
 
                 </label>
-            <input value={data.town}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="town" onChange={handleChange}  type="text" placeholder="Town"/>
+            <input value={data.town}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="town" onChange={handleChange}  type="text" placeholder="Town"/>
           </div>
 
 
@@ -91,20 +96,13 @@ export default function Adminvolunteermodal({isEdit,data,handleChange,editRecord
             <label className="block text-gray-700 text-sm font-bold mb-2" for="Assigned">
            
           County
-
                 </label>
-            <input value={data.county}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="county" onChange={handleChange}  type="text" placeholder="County"/>
+            <input value={data.county}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="county" onChange={handleChange}  type="text" placeholder="County"/>
           </div>
 
 
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" for="Assigned">
-           
-          City
-
-                </label>
-            <input value={data.city}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="city" onChange={handleChange}  type="text" placeholder="City"/>
-          </div>
+       
 
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" for="Assigned">
@@ -112,7 +110,8 @@ export default function Adminvolunteermodal({isEdit,data,handleChange,editRecord
 
 Postcode
                 </label>
-            <input value={data.postcode}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="postcode" onChange={handleChange}  type="text" placeholder="PostCode"/>
+            <input value={data.postcode}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="postcode" onChange={handleChange}  type="text" placeholder="PostCode"/>
           </div>
        
 
@@ -122,7 +121,8 @@ Postcode
           Mobile
 
                 </label>
-            <input value={data.mobile}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="mobile" onChange={handleChange}  type="text" placeholder="Mobile"/>
+            <input value={data.mobile}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="mobile" onChange={handleChange}  type="text" placeholder="Mobile"/>
           </div>
 
 
@@ -132,7 +132,8 @@ Postcode
            Email
 
                 </label>
-            <input value={data.email}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="email" onChange={handleChange}  type="text" placeholder="Email"/>
+            <input value={data.email}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}
+  name="email" onChange={handleChange}  type="text" placeholder="Email"/>
           </div>
 
         </p>

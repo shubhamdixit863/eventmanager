@@ -1,18 +1,20 @@
 import DataTable from 'react-data-table-component';
 import SortIcon from "@material-ui/icons/ArrowDownward";
-import Modal from 'react-modal';
 import React,{useState,useEffect} from "react";
-import Eventmodal from "./Eventmodal";
 
 import { PencilIcon, TrashIcon } from '@heroicons/react/solid'
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import { NotificationManager} from 'react-notifications';
 import Loader from "react-loader-spinner";
 import moment from "moment";
 import _ from "lodash";
+import {
+
+  Link,
+  useParams
+} from "react-router-dom";
 
 //import axios from 'axios';
-import axios from '../../interceptors'; // importing axios from customAxios
-import { NavLink,Link } from 'react-router-dom';
+import axios from '../interceptors'; // importing axios from customAxios
 
 
 
@@ -21,7 +23,7 @@ import { NavLink,Link } from 'react-router-dom';
 
 
 
-export default function Adminevent() {
+export default function Volunteershift() {
 
 
   const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -30,22 +32,25 @@ export default function Adminevent() {
   const [loader,setLoader]=useState(false);
   const [deleted,setDeleted]=useState(false)
 
-  const [validation,setValidation]=useState(false)
   const [endDate, setEndDate] = useState(new Date());
   const [endTime, setEndTime] = useState('10:00');
   const [showModal, setShowModal] = React.useState(false);
   const [editedData,setEditData]=useState({})
   const [isEdit,setisEdit]=useState(false);
+  const [eventsData,setEventsData]=useState([]);
+  let { eventId } = useParams();
+
 
   const initalState={
-    title:"",
+ 
     description:"",
-    location:"",
-    type:"",
+  
     startDate:"",
     startTime:"",
     endDate:"",
     endTime:"",
+    eventId:""
+   
 
 
 
@@ -114,14 +119,13 @@ setEditData({...editedData,endTime:event})
   const columns = [
     {
       id: 1,
-      name: "Title",
-      cell:(row, index, column, id) => <Link  style={{ color:"blue" ,textDecoration:"underline"}}to={{pathname:`/admin/shift/${row.event_id}`}}>{row.title}</Link>,
+      name: "Id",
+      cell:(row, index, column, id) => <Link  style={{ color:"blue" ,textDecoration:"underline"}}to={{pathname:`/shiftposition/${row.id}`}}>{row.id}</Link>,
       sortable: true,
       reorder: true,
-      wrap:true,
-      right:true
-   
+      wrap:true
     },
+  
     {
       id: 2,
       name: "Description",
@@ -130,25 +134,18 @@ setEditData({...editedData,endTime:event})
       reorder: true,
       wrap:true
     },
+   
     {
       id: 3,
-      name: "Location",
-      selector: (row) => row.location,
+      name: "Event Name",
+      selector: (row) => row.eventName,
       sortable: true,
-      right: true,
       reorder: true,
       wrap:true
-
     },
-    {
+
+   {
       id: 4,
-      name: "Type",
-      selector: (row) => row.type,
-      sortable: true,
-      right: true,
-      reorder: true
-    },{
-      id: 5,
       name: "Start Date And Time",
       selector: (row) => `${moment(row.startDate).format("DD/MM/YYYY")} ${row.startTime}`,
       sortable: true,
@@ -157,7 +154,7 @@ setEditData({...editedData,endTime:event})
       wrap:true
     },
     {
-      id: 6,
+      id: 5,
       name: "End Date And Time",
       selector: (row) => `${moment(row.endDate).format("DD/MM/YYYY")} ${row.endTime}`,
       sortable: true,
@@ -166,35 +163,11 @@ setEditData({...editedData,endTime:event})
       wrap:true
     },
    
-    {
-      id: 7,
-      name: "Volunteer",
-      selector: (row) => row.volunteerCount,
-    
-      sortable: true,
-      right: true,
-      reorder: true
-    },
-    {
-      id:8,
-      name:"Edit",
-      cell:(row, index, column, id) => <PencilIcon onClick={()=>editData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
-      sortable: true,
-      right: true,
-      reorder: true
-     
-      
-    },
-    {
-      id:9,
-      name:"Delete",
-      cell:(row, index, column, id) => <TrashIcon onClick={()=>deleteData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
-      sortable: true,
-      right: true,
-      reorder: true
-     
-      
-    }
+   
+   
+  
+ 
+   
   ];
 
 
@@ -215,7 +188,7 @@ setEditData({...editedData,endTime:event})
   const deleteData=(...data)=>{
     setLoader(true);
 
-    axios.delete(`${process.env.REACT_APP_URL}/event/${data[0].event_id}`).then(data=>{
+    axios.delete(`${process.env.REACT_APP_URL}/shift/${data[0].id}`).then(data=>{
       NotificationManager.success('SuccessFully Deleted', 'Success');
 
       setDeleted(!deleted);
@@ -229,34 +202,65 @@ setEditData({...editedData,endTime:event})
 
 useEffect(() => {
 
-  getData()
+  getData();
+  getEvents()
  
 }, [deleted])
 
 
 function getData()
 {
+
+  if(!eventId)
+  {
+
+    setLoader(true)
+    axios.get(`${process.env.REACT_APP_URL}/shift`).then(data=>{
+      setLoader(false);
+  
+   setapiData(data["data"]);
+    }).catch(err=>{
+      console.log(err);
+      setLoader(false);
+  
+    })
+  }
+
+  else{
+    setLoader(true)
+    axios.get(`${process.env.REACT_APP_URL}/shiftByEventID/${eventId}`).then(data=>{
+      setLoader(false);
+  
+   setapiData(data["data"]);
+    }).catch(err=>{
+      console.log(err);
+      setLoader(false);
+  
+    })
+  }
+
+
+
+}
+
+function getEvents()
+{
+  
+  if(!eventId)
+  {
   setLoader(true)
-  axios.get(`/event`).then(data=>{
+  axios.get(`${process.env.REACT_APP_URL}/event`).then(data=>{
     setLoader(false);
+    setEventsData(data["data"]);
 
 
-    const __data=data["data"].map(ele=>{
-
-      ele.volunteerCount=ele.shift.map(e=>e.shiftPosition.length).reduce((a, b) => a + b, 0)
-      delete ele.shift;
-      return ele;
-      
-      
-      
-      })
-
- setapiData(__data);
   }).catch(err=>{
     console.log(err);
     setLoader(false);
 
   })
+
+}
 
 }
 
@@ -269,12 +273,13 @@ function getData()
     events.startTime=startTime;
     events.endDate=moment(endDate).format("YYYY-MM-DD");
     events.endTime=endTime;
-   
+    if(!events.eventId) events.eventId=eventId;
+   debugger;
 const check=Object.values(events).some(ele=>ele.length===0);
 
- if (check) {NotificationManager.error('All Fields Are Required','Error') ;setLoader(false);setValidation(true);return}
+ if (check) {NotificationManager.error('All Fields Are Required','Error') ;setLoader(false);return}
 
-    axios.post(`${process.env.REACT_APP_URL}/event`,events).then(data=>{
+    axios.post(`${process.env.REACT_APP_URL}/shift`,events).then(data=>{
       console.log(data);
       NotificationManager.success('SuccessFully created', 'Success');
       setShowModal(false)
@@ -292,24 +297,17 @@ const check=Object.values(events).some(ele=>ele.length===0);
 
   const editRecord=()=>{
     
-    
     setLoader(true)
+    
+    editedData.startDate=moment(editedData.startDate).format("DD/MM/YYYY");
+    
+    editedData.endDate=moment(editedData.endDate).format("DD/MM/YYYY");
+    if(!editedData.eventId) editedData.eventId=eventId;
 
     
-    editedData.startDate=moment(editedData.startDate).format("YYYY-MM-DD");
-    
-    editedData.endDate=moment(editedData.endDate).format("YYYY-MM-DD");
-    delete editedData.shift;
-
-
-    const check=Object.values(editedData).some(ele=>ele.length===0);
-
- if (check) {NotificationManager.error('All Fields Are Required','Error') ;setLoader(false);setValidation(true);return}
-
-    
-    axios.put(`${process.env.REACT_APP_URL}/event`,editedData).then(data=>{
+    axios.put(`${process.env.REACT_APP_URL}/shift`,editedData).then(data=>{
       console.log(data);
-      NotificationManager.success('SuccessFully Updated', 'Success');
+      NotificationManager.success('SuccessFully Edited', 'Success');
       setShowModal(false)
       setDeleted(!deleted);
 
@@ -343,14 +341,6 @@ const check=Object.values(events).some(ele=>ele.length===0);
 
     return (
         <section class="container mx-auto p-6 font-mono">
-          <Loader
-        style={{position:"absolute" ,zIndex:"1000",marginTop:"100px" ,marginLeft:"550px"}}
-        type="Bars"
-        color="#00BFFF"
-        height={100}
-        width={100}
-        visible={loader}
-      />
           
 
         <div class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
@@ -358,13 +348,11 @@ const check=Object.values(events).some(ele=>ele.length===0);
 
         
           
-<button onClick={() => setShowModal(true)} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-  Create New
-</button>
+
 
      
 <DataTable
-title={"Event List"}
+title={apiData[0]?`${apiData[0].eventName} Shift List`:"Shift List"}
 columns={columns}
 data={apiData}
 defaultSortFieldId={1}
@@ -374,12 +362,18 @@ pagination
 className="w-full"
 />
 
-
+<Loader
+        style={{position:"absolute" ,zIndex:"1000",marginTop:"100px" ,marginLeft:"550px"}}
+        type="Bars"
+        color="#00BFFF"
+        height={100}
+        width={100}
+        visible={loader}
+      />
 
     </div>
     </div>
 
-  <Eventmodal validation={validation} isEdit={isEdit} editRecord={editRecord} data={editedData} handleChange={handleChange} setStartDate={setStartDateData} startDate={startDate} setStartTime={setStartTimeData} startTime={startTime} setEndDate={setEndDateData} endDate={endDate} setEndTime={setEndTimeData} endTime={endTime} createNewRecord={createNewRecord} setShowModal={setShowModal} showModal={showModal}/>
     </section>
 
      

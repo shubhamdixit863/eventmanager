@@ -5,7 +5,7 @@ import constants from '../../constants/constants';
 import moment  from "moment";
 
 
-export default function Modal({isEdit,data,handleChange,editRecord,setStartDate,startDate,setStartTime,startTime,setEndDate,endDate,setEndTime,endTime,createNewRecord,setShowModal,showModal}) {
+export default function Modal({isEdit,validation,data,handleChange,editRecord,setStartDate,startDate,setStartTime,startTime,setEndDate,endDate,setEndTime,endTime,createNewRecord,setShowModal,showModal}) {
   return (
     <>
      
@@ -47,14 +47,14 @@ New Event                  </h3>}
             <label className="block text-gray-700 text-sm font-bold mb-8" for="username">
               Title
             </label>
-            <input value={data.title} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"  name="title" onChange={handleChange} type="text" placeholder="Title"/>
+            <input value={data.title} className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow border-red-500 appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"} name="title" onChange={handleChange} type="text" placeholder="Title"/>
           </div>
           <div className="mb-6">
             <label className="block text-gray-700 text-sm font-bold mb-2" for="Description">
                 Description
 
                 </label>
-            <input value={data.description}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="description" onChange={handleChange}  type="text" placeholder="Description"/>
+            <input value={data.description}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow border-red-500 appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}  name="description" onChange={handleChange}  type="text" placeholder="Description"/>
           </div>
 
           <div className="mb-6">
@@ -62,7 +62,7 @@ New Event                  </h3>}
 
                Location
                 </label>
-            <input  value={data.location}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="location" onChange={handleChange}  type="text" placeholder="Location"/>
+            <input  value={data.location}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow border-red-500 appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}  name="location" onChange={handleChange}  type="text" placeholder="Location"/>
           </div>
 
           <div className="mb-6">
@@ -71,9 +71,10 @@ New Event                  </h3>}
                 Type
                 </label>
                 
-                <select  value={data.type}  className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="type" onChange={handleChange} >
-
+                <select  value={data.type}  className={!validation?"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline":"shadow border-red-500 appearance-none border  rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"}  name="type" onChange={handleChange} >
+                <option value="">Select</option>
                   {
+            
                     constants.types.map(ele=>(
                       <option value={ele.value}>{ele.key}</option>
                      
@@ -131,24 +132,7 @@ End Time
           </div>
 
 
-          <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" for="Location">
-
-                Owner
-                </label>
-                
-                <select className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"  name="requiredOwner" onChange={handleChange}  >
-
-                  {
-                    constants.owner.map(ele=>(
-                      <option value={ele.value}>{ele.key}</option>
-                     
-
-                    ))
-                  }
-
-</select>
-          </div>
+          
 
 
          

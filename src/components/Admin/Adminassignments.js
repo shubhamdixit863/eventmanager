@@ -15,7 +15,7 @@ const customStyles = {
   },
 };
 
-const movies=[
+const apiData=[
     {
       id: 1,
       title: "Beetlejuice",
@@ -413,7 +413,7 @@ export default function Adminassignment() {
 <DataTable
 title={"Shift List"}
 columns={columns}
-data={movies}
+data={apiData}
 defaultSortFieldId={1}
 sortIcon={<SortIcon />}
 pagination
