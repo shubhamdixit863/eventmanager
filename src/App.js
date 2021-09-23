@@ -11,7 +11,6 @@ import {
 import Login from './components/Login';
 
 import Signup from './components/Signup';
-import Shiftlist from './components/Shiftlist';
 import Adminevent from './components/Admin/Adminevent';
 import Modal from './components/Admin/Eventmodal';
 
@@ -19,6 +18,9 @@ import Adminshift from './components/Admin/Adminshift';
 import Adminshiftposition from './components/Admin/Adminshiftposition';
 import Adminvolunteer from './components/Admin/Adminvolunteer';
 import Protectedroutes from './components/Auth/Protectedroutes';
+import Volunteerevent from './components/VolunteerEvent';
+import Volunteershift from './components/VolunteerShift';
+import Volunteershiftposition from './components/VolunterShiftPosition';
 
 
 function App() {
@@ -36,7 +38,6 @@ function App() {
 
         <Switch>
 
-        <Protectedroutes exact path="/" component={(props)=><Shiftlist {...props}/>}  expectedRole="user" />
 
 
 
@@ -52,7 +53,11 @@ function App() {
           <Route exact path="/signup">
             <Signup/>
           </Route>
-          <Protectedroutes exact path="/shiftlist" component={(props)=><Shiftlist {...props}/>}  expectedRole="user" />
+          <Protectedroutes exact path="/event" component={(props)=><Volunteerevent {...props}/>}  expectedRole="user" />
+          <Protectedroutes exact path="/shift/:eventId?" component={(props)=><Volunteershift {...props}/>}  expectedRole="user" />
+          <Protectedroutes exact path="/shiftposition/:shiftId" component={(props)=><Volunteershiftposition {...props}/>}  expectedRole="user" />
+
+
 
 
         
