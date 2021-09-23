@@ -2,15 +2,31 @@ import React,{useState} from 'react'
 import axios from "axios";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import Loader from "react-loader-spinner";
+import { useHistory } from "react-router-dom";
 
 
 function Signup() {
-  const [state,setState]=useState({
+
+  let history = useHistory();
+  const initial={
+  
+    password:"",
+    firstName:"",
+    lastName:"",
+    address1:"",
+    address2:"",
+    town:"",
+    county:"",
+    email:"",
+    mobile:"",
+    postcode:"",
     username:"",
-    password:""
-  })
+  }
+  const [state,setState]=useState(initial)
 
   const [loader,setLoader]=useState(false);
+  const [validation,setValidation]=useState(false)
+
 
 const handleChange=(event)=>{
   setState({...state,[event.target.name]:event.target.value})
@@ -20,17 +36,27 @@ const handleChange=(event)=>{
 
 const Signup=()=>{
   setLoader(true);
+  state.username=state.email;
+
+  const shiftPosition2=Object.assign({},state)
+  delete shiftPosition2.address2;
+  delete shiftPosition2.county;
+  const check=Object.values(shiftPosition2).some(ele=>ele.length ===0);
+  
+
+if (check) {NotificationManager.error('Please Fill The Required Fields','Error') ;setLoader(false);setValidation(true);return}
 
   axios.post(`${process.env.REACT_APP_URL}/createcred`,{...state,role:"user"}).then(data=>{
     setLoader(false);
     if(data["data"])
     {
-      NotificationManager.success('Signup Success ,Please Login', 'Success');
-
+      NotificationManager.success('Signup Success ,Please Login', 'Success',1000);
+      setState(initial);
+      history.push("/login");
     }
 
     else{
-      NotificationManager.error('Username Already In Use', 'Failed', 3000);
+      NotificationManager.error('Username Already In Use', 'Failed', 1000);
 
     }
   })
@@ -49,7 +75,7 @@ const Signup=()=>{
        
           <div className="mt-12 flex flex-col items-center">
             <h1 className="text-2xl xl:text-3xl font-extrabold">
-              Sign up Here
+            Volunteer  Sign up Here
             </h1>
             <div className="w-full flex-1 mt-8">
         
@@ -60,8 +86,8 @@ const Signup=()=>{
                 <input
                   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                   type="text"
-                  placeholder="Username"
-                  name="username"
+                  placeholder="Email"
+                  name="email"
                   onChange={handleChange}
                 />
                 <input
@@ -72,6 +98,64 @@ const Signup=()=>{
                   onChange={handleChange}
 
                 />
+
+
+
+           
+            <input  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+
+  name="firstName" onChange={handleChange}  type="text" placeholder="First Name"/>
+       
+        
+           
+            <input  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+
+  name="lastName" onChange={handleChange}  type="text" placeholder="Last Name"/>
+     
+
+
+ 
+       
+            <input   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+
+  name="address1" onChange={handleChange}  type="text" placeholder="Address Line 1"/>
+
+
+    
+     
+            <input  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+  name="address2" onChange={handleChange}  type="text" placeholder="Address Line 2"/>
+       
+
+           
+            <input   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+
+  name="town" onChange={handleChange}  type="text" placeholder="Town"/>
+    
+
+
+    
+          
+            <input   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+  name="county" onChange={handleChange}  type="text" placeholder="County"/>
+ 
+
+           <input  className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+
+  name="postcode" onChange={handleChange}  type="text" placeholder="PostCode"/>
+         
+       
+
+     
+         
+            <input   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+
+  name="mobile" onChange={handleChange}  type="text" placeholder="Mobile"/>
+   
+
+
+       
+      
                 <button
                   className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
 

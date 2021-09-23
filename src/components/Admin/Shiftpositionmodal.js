@@ -69,7 +69,7 @@ Roles
 {
 
   volunteers.map(ele=>(
-    <option value={`${ele.firstName} ${ele.lastName}`}>{`${ele.firstName} ${ele.lastName}`}</option>
+    <option value={ele.email}>{`${ele.firstName} ${ele.lastName}`}</option>
    
 
   ))

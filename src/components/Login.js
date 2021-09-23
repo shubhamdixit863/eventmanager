@@ -33,21 +33,28 @@ function Login() {
   }
   const Login=()=>{
     setLoader(true);
+
+    // process.env.REACT_APP_URL
+
+
+    // axios.post //axios.get // axios.put //axios.delete
   
-    axios.post(`/login`,{...state,role:"user"}).then(data=>{
+    axios.post(`/login`,{...state,role:"user"}).then(data=>{  // Axios Response
 
       setLoader(false);
       if(data["data"].success)
       {
         localStorage.setItem("token",data["data"].token);
         localStorage.setItem("role",data["data"].role)
-        NotificationManager.success('Signup Success ,Please Login', 'Success');
+        localStorage.setItem("volunteerName",data["data"].volunteerName)
+        localStorage.setItem("volunteerUsername",data["data"].volunteerUsername)
+        NotificationManager.success('Login Success' , 'Success',1000);
         if(data["data"].role=="admin")
         {
           history.push("/admin/event");
         }
         else{
-          history.push("/shiftlist");
+          history.push("/event");
         }
       
         setMessage({...message,loggedIn:true,role:data["data"].role});
@@ -59,6 +66,11 @@ function Login() {
         NotificationManager.error('Wrong username Or Password', 'Failed', 3000);
   
       }
+    }).catch(err=>{
+      console.log("Errorr--------")
+      setLoader(false);
+
+      console.log(err);
     })
   
   }

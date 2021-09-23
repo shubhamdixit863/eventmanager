@@ -48,6 +48,7 @@ export default function Adminshiftposition() {
  
     role:"",
     assigned:"",
+    assignedUsername:""
    
    }
 
@@ -58,12 +59,32 @@ export default function Adminshiftposition() {
   const handleChange=(event)=>{
     if(!isEdit)
     {
-      setShiftPosition({...shiftposition,[event.target.name]:event.target.value})
+      if(event.target.name=="assigned")
+      {
+        setShiftPosition({...shiftposition,[event.target.name]:event.target.selectedOptions[0].text,assignedUsername:event.target.value})
+      }
+      else{
+        setShiftPosition({...shiftposition,[event.target.name]:event.target.value})
+
+      }
 
     }
 
     else{
-      setEditData({...editedData,[event.target.name]:event.target.value})
+      if(event.target.name=="assigned")
+      {
+        setEditData({...editedData,[event.target.name]:event.target.selectedOptions[0].text
+
+          ,assignedUsername:event.target.value})
+
+      }
+
+      else{
+        setEditData({...editedData,[event.target.name]:event.target.value})
+
+      }
+
+
     }
   }
 
@@ -143,7 +164,7 @@ const columns = [
     setLoader(true);
 
     axios.delete(`${process.env.REACT_APP_URL}/ShiftPosition/${data[0].id}`).then(data=>{
-      NotificationManager.success('SuccessFully Deleted', 'Success');
+      NotificationManager.success('SuccessFully Deleted', 'Success',500);
 
       setDeleted(!deleted);
 
@@ -218,7 +239,7 @@ function getVolunteers()
 
     axios.post(`ShiftPosition`,shiftposition).then(data=>{
       console.log(data);
-      NotificationManager.success('SuccessFully created', 'Success');
+      NotificationManager.success('SuccessFully created', 'Success',500);
       setShowModal(false)
       setDeleted(!deleted);
 
@@ -242,7 +263,7 @@ function getVolunteers()
     
     axios.put(`ShiftPosition`,editedData).then(data=>{
       console.log(data);
-      NotificationManager.success('SuccessFully Edited', 'Success');
+      NotificationManager.success('SuccessFully Edited', 'Success',500);
       setShowModal(false)
       setDeleted(!deleted);
 

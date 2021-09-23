@@ -237,6 +237,7 @@ useEffect(() => {
 function getData()
 {
   setLoader(true)
+  /// hide your --->that msg--->
   axios.get(`/event`).then(data=>{
     setLoader(false);
 

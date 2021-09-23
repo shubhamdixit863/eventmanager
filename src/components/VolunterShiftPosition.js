@@ -40,6 +40,7 @@ export default function Volunteershiftposition() {
   const [isEdit,setisEdit]=useState(false);
   const [shiftpositionData,setEventsData]=useState([]);
   const [volunteers,setVolunteers]=useState([]);
+  const assignedUsername=localStorage.getItem("volunteerUsername");
  
   let { shiftId } = useParams();
 
@@ -97,18 +98,30 @@ const columns = [
       wrap:true
     },
 
-/*
+
     {
       id:4,
-      name:"Edit",
-      cell:(row, index, column, id) => <PencilIcon onClick={()=>editData(row, index, column, id)} style={{cursor:"pointer"}} className="h-5 w-5 text-blue-500"/>,
+      name:"Assign",
+      cell:(row, index, column, id) =>  (row.assignedUsername==null || row.assignedUsername=="") ? <button type="button" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        
+      onClick={()=>editData(row, index, column, id)}
+      >
+     
+       Assign YourSelf
+      </button>:row.assignedUsername==assignedUsername?<button type="button" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        
+        onClick={()=>removeData(row, index, column, id)}
+        >
+       
+         Remove YourSelf
+        </button>:"Already Taken",
       sortable: true,
       right: true,
       reorder: true
      
       
     },
-    */
+    
 
    
    
@@ -123,31 +136,49 @@ const columns = [
 
 
   const editData=(...data)=>{
-    console.log(data);
-    setEditData(data[0])
-    setisEdit(true)
+    const editedData=data[0];
+    setLoader(true)
+  
+    editedData.assigned=localStorage.getItem("volunteerName");
+    editedData.assignedUsername=localStorage.getItem("volunteerUsername");
+    axios.put(`ShiftPosition`,editedData).then(data=>{
+      console.log(data);
+      NotificationManager.success('SuccessFully Assigned', 'Success',500);
+      setDeleted(!deleted);
+
+
+    }).catch(err=>{
+      console.log(err);
     
-    setShowModal(true);
+
+    })
 
 
   }
 
 
-
-  const deleteData=(...data)=>{
-    setLoader(true);
-
-    axios.delete(`${process.env.REACT_APP_URL}/ShiftPosition/${data[0].id}`).then(data=>{
-      NotificationManager.success('SuccessFully Deleted', 'Success');
+  const removeData=(...data)=>{
+    const editedData=data[0];
+    setLoader(true)
+  
+    editedData.assigned="";
+    editedData.assignedUsername="";
+    axios.put(`ShiftPosition`,editedData).then(data=>{
+      console.log(data);
+      NotificationManager.success('SuccessFully Removed', 'Success',500);
 
       setDeleted(!deleted);
 
     }).catch(err=>{
       console.log(err);
+    
+
     })
 
 
   }
+
+
 
 useEffect(() => {
 

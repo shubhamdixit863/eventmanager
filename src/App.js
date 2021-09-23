@@ -53,6 +53,8 @@ function App() {
           <Route exact path="/signup">
             <Signup/>
           </Route>
+          <Protectedroutes exact path="/" component={(props)=><Volunteerevent {...props}/>}  expectedRole="user" />
+
           <Protectedroutes exact path="/event" component={(props)=><Volunteerevent {...props}/>}  expectedRole="user" />
           <Protectedroutes exact path="/shift/:eventId?" component={(props)=><Volunteershift {...props}/>}  expectedRole="user" />
           <Protectedroutes exact path="/shiftposition/:shiftId" component={(props)=><Volunteershiftposition {...props}/>}  expectedRole="user" />
